@@ -35,3 +35,19 @@ button{padding:10px 14px;background:var(--accent);color:white;border:0;border-ra
 }
 
 code{background:#f0f2f2;padding:2px 6px;border-radius:4px;font-size:13px}  
+
+/* Social footer */
+.site-footer{
+  margin-top:28px;
+  padding:18px 24px;
+  text-align:center;
+  color:var(--muted);
+  background:transparent;
+}
+.socials{display:flex;gap:12px;justify-content:center;margin-bottom:8px}
+.social{display:inline-flex;width:44px;height:44px;align-items:center;justify-content:center;border-radius:8px;background:#fff;border:1px solid #eee;text-decoration:none;color:inherit;transition:transform .12s ease, box-shadow .12s ease}
+.social.white-bg{background:#f4f5f6}
+.social svg, .social img{width:20px;height:20px;fill:var(--accent);object-fit:cover;border-radius:6px}
+.social.white-bg img{padding:6px;border-radius:6px}
+.social:hover{transform:translateY(-3px);box-shadow:0 6px 12px rgba(0,0,0,0.06)}
+@media (max-width:420px){.social{width:40px;height:40px}.social svg{width:18px;height:18px}}

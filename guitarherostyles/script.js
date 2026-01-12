@@ -14,6 +14,15 @@ camImage.addEventListener('error', () => {
   camImage.classList.remove('show');
 });
 
+const camMap = {
+  11: 'cam11.jpeg',
+  12: 'cam12.jpeg',
+  13: 'cam13.jpeg',
+  14: 'cam14.png',
+  15: 'cam15.jpeg',
+  18: 'cam18.jpeg'
+};
+
 function mensajeSegunEdad(edad){
   if (isNaN(edad)) return 'Ingresa una edad válida.';
 
@@ -32,35 +41,42 @@ function mensajeSegunEdad(edad){
   return 'No hay un mensaje específico para esa edad.';
 }
 
+function showCamFor(filename) {
+  if (!filename) {
+    camImage.classList.remove('show');
+    return;
+  }
+
+  const desired = 'images/' + filename;
+
+  // Si la imagen ya es la misma y está cargada, mostrarla inmediatamente
+  if (camImage.src.split('?')[0].endsWith(filename) && camImage.complete && camImage.naturalWidth > 0) {
+    camImage.classList.add('show');
+    return;
+  }
+
+  // Ocultar mientras se carga
+  camImage.classList.remove('show');
+  result.textContent = result.textContent.replace(' (cargando imagen...)', '') + ' (cargando imagen...)';
+
+  const onLoad = () => {
+    camImage.classList.add('show');
+    result.textContent = result.textContent.replace(' (cargando imagen...)', '');
+    camImage.removeEventListener('load', onLoad);
+  };
+
+  camImage.addEventListener('load', onLoad);
+
+  // Forzar recarga y establecer la nueva imagen
+  camImage.src = desired + '?_=' + Date.now();
+}
+
 checkBtn.addEventListener('click', () => {
   const edad = parseInt(ageInput.value, 10);
   result.textContent = mensajeSegunEdad(edad);
 
-  if (edad === 14) {
-    // Mostrar la imagen solo cuando esté realmente cargada para evitar mostrar el `alt`.
-    if (camImage.complete && camImage.naturalWidth > 0) {
-      camImage.classList.add('show');
-    } else {
-      // Mantener oculta hasta que termine de cargar
-      camImage.classList.remove('show');
-      // Avisar al usuario que la imagen se está cargando
-      result.textContent = mensajeSegunEdad(edad) + ' (cargando imagen...)';
-
-      const onLoad = () => {
-        camImage.classList.add('show');
-        result.textContent = mensajeSegunEdad(edad);
-        camImage.removeEventListener('load', onLoad);
-      };
-
-      camImage.addEventListener('load', onLoad);
-
-      // Forzar recarga (evita caché si previamente falló)
-      const base = camImage.src.split('?')[0];
-      camImage.src = base + '?_=' + Date.now();
-    }
-  } else {
-    camImage.classList.remove('show');
-  }
+  const imgFile = camMap[edad];
+  showCamFor(imgFile);
 });
 
 ageInput.addEventListener('keyup', (e) => {
